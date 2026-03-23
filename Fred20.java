@@ -78,5 +78,5 @@ public class Fred20 extends JFrame {
     public static void main(String[] args) {
         Fred20 f = new Fred20();
         f.setVisible(true);
-    }
+    }                 
 }
