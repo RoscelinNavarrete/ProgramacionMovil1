@@ -1,103 +1,82 @@
-import java.awt.Font;
+import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-public class CalculadoraGrafica extends JFrame {
+public class Fred20 extends JFrame {
 
-    JTextField n1, n2;
-    JButton btnSum, btnRes, btnDiv, btnMul;
-    JLabel txtRes;
-    Font fuente = new Font("Courier", Font.BOLD, 40);
+    JButton casillas[] = new JButton[4];
+    int[] secuencia = new int[6];
+    Random r = new Random();
 
-    public CalculadoraGrafica() {
+    // Colores asignados
+    Color[] colores = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
 
-        setTitle("casio");
-        setSize(600,400);
-        setLayout(new GridLayout(4,1));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public Fred20() {
+        setTitle("Fred20");
+        setSize(300, 300);
+        setDefaultCloseOperation(3);
+        setLayout(new GridLayout(2, 2));
 
-        // Panel números
-        JPanel panelNumeros = new JPanel(new GridLayout(1,2));
+        for (int i = 0; i < casillas.length; i++) {
+            casillas[i] = new JButton();
+            casillas[i].setBackground(Color.LIGHT_GRAY);
 
-        n1 = new JTextField();
-        n2 = new JTextField();
+            int index = i; // importante para el listener
 
-        n1.setFont(fuente);
-        n2.setFont(fuente);
+            casillas[i].addActionListener(e -> {
+                encenderBoton(index);
+            });
 
-        panelNumeros.add(n1);
-        panelNumeros.add(n2);
+            add(casillas[i]);
+        }
 
-        // Panel botones
-        JPanel panelBotones = new JPanel(new GridLayout(1,4));
+        crearSecuencia();
+        mostrarSecuencia();
+    }
 
-        btnSum = new JButton("+");
-        btnRes = new JButton("-");
-        btnMul = new JButton("*");
-        btnDiv = new JButton("/");
+    public void crearSecuencia() {
+        for (int i = 0; i < secuencia.length; i++) {
+            secuencia[i] = r.nextInt(4);
+        }
 
-        btnSum.setFont(fuente);
-        btnRes.setFont(fuente);
-        btnMul.setFont(fuente);
-        btnDiv.setFont(fuente);
+        for (int x : secuencia) {
+            System.out.print(x + " ");
+        }
+    }
 
-        panelBotones.add(btnSum);
-        panelBotones.add(btnRes);
-        panelBotones.add(btnMul);
-        panelBotones.add(btnDiv);
-
-        // Resultado
-        txtRes = new JLabel("0");
-        txtRes.setFont(fuente);
-
-        add(panelNumeros);
-        add(panelBotones);
-        add(txtRes);
-
-        // Eventos botones
-
-        btnSum.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                double a = Double.parseDouble(n1.getText());
-                double b = Double.parseDouble(n2.getText());
-                txtRes.setText(String.valueOf(a+b));
+    public void mostrarSecuencia() {
+        Thread hilo = new Thread(() -> {
+            for (int i = 0; i < secuencia.length; i++) {
+                int indice = secuencia[i];
+                try {
+                    casillas[indice].setBackground(colores[indice]);
+                    Thread.sleep(1000);
+                    casillas[indice].setBackground(Color.LIGHT_GRAY);
+                    Thread.sleep(300);
+                } catch (Exception e) {
+                }
             }
         });
+        hilo.start();
+    }
 
-        btnRes.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                double a = Double.parseDouble(n1.getText());
-                double b = Double.parseDouble(n2.getText());
-                txtRes.setText(String.valueOf(a-b));
+    // Método para encender botón cuando el usuario presiona
+    public void encenderBoton(int indice) {
+        Thread hilo = new Thread(() -> {
+            try {
+                casillas[indice].setBackground(colores[indice]);
+                Thread.sleep(300);
+                casillas[indice].setBackground(Color.LIGHT_GRAY);
+            } catch (Exception e) {
             }
         });
-
-        btnMul.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                double a = Double.parseDouble(n1.getText());
-                double b = Double.parseDouble(n2.getText());
-                txtRes.setText(String.valueOf(a*b));
-            }
-        });
-
-        btnDiv.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                double a = Double.parseDouble(n1.getText());
-                double b = Double.parseDouble(n2.getText());
-                txtRes.setText(String.valueOf(a/b));
-            }
-        });
-
-        setVisible(true);
+        hilo.start();
     }
 
     public static void main(String[] args) {
-        new CalculadoraGrafica();
+        Fred20 f = new Fred20();
+        f.setVisible(true);
     }
 }
