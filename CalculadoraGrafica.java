@@ -8,84 +8,96 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class CalculadoraGrafica extends JFrame{
+public class CalculadoraGrafica extends JFrame {
+
     JTextField n1, n2;
     JButton btnSum, btnRes, btnDiv, btnMul;
     JLabel txtRes;
-    Font fuente = new Font("Courier",1,60);
-   
-    public CalculadoraGrafica(){
+    Font fuente = new Font("Courier", Font.BOLD, 40);
+
+    public CalculadoraGrafica() {
+
         setTitle("casio");
-        setSize(400,400);
-        setDefaultCloseOperation(3);
+        setSize(600,400);
         setLayout(new GridLayout(4,1));
-       
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Panel números
+        JPanel panelNumeros = new JPanel(new GridLayout(1,2));
+
         n1 = new JTextField();
-        n1.setFont(fuente);
         n2 = new JTextField();
+
+        n1.setFont(fuente);
         n2.setFont(fuente);
-       
-        JPanel pOpciones = new JPanel(new GridLayout(1,4));
+
+        panelNumeros.add(n1);
+        panelNumeros.add(n2);
+
+        // Panel botones
+        JPanel panelBotones = new JPanel(new GridLayout(1,4));
+
         btnSum = new JButton("+");
-        btnSum.setFont(fuente);
         btnRes = new JButton("-");
-        btnRes.setFont(fuente);
         btnMul = new JButton("*");
-        btnMul.setFont(fuente);
         btnDiv = new JButton("/");
+
+        btnSum.setFont(fuente);
+        btnRes.setFont(fuente);
+        btnMul.setFont(fuente);
         btnDiv.setFont(fuente);
-       
-        pOpciones.add(btnSum);        
-        pOpciones.add(btnRes);
-        pOpciones.add(btnMul);
-        pOpciones.add(btnDiv);
-               
+
+        panelBotones.add(btnSum);
+        panelBotones.add(btnRes);
+        panelBotones.add(btnMul);
+        panelBotones.add(btnDiv);
+
+        // Resultado
         txtRes = new JLabel("0");
         txtRes.setFont(fuente);
-       
-        btnSum.addActionListener(new ActionListener() {
+
+        add(panelNumeros);
+        add(panelBotones);
+        add(txtRes);
+
+        // Eventos botones
+
+        btnSum.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                double num1 = Double.parseDouble(n1.getText());
-                double num2 = Double.parseDouble(n2.getText());
-               
-                //txtRes.setText((num1+num2)+"");
-                Calculadora cc = new Calculadora();
-                txtRes.setText(String.valueOf(cc.sumar(num1, num2)));
-            }        
-        });    
-       
-        btnMul.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                double num1 = Double.parseDouble(n1.getText());
-                double num2 = Double.parseDouble(n2.getText());
-                txtRes.setText(String.valueOf(Calculadora.multiplicar(num1, num2)));
+                double a = Double.parseDouble(n1.getText());
+                double b = Double.parseDouble(n2.getText());
+                txtRes.setText(String.valueOf(a+b));
             }
         });
-       
-        btnRes.addActionListener(e->calcular("-"));
-       
-        btnDiv.addActionListener(e->calcular("/"));
-       
-        add(n1);
-        add(n2);
-        add(pOpciones);
-        add(txtRes);        
-    }//fin constructor
-   
-    public void calcular(String operador){
-         double num1 = Double.parseDouble(n1.getText());
-         double num2 = Double.parseDouble(n2.getText());
-         double resultado = 0;
-         switch(operador){
-             case "-": resultado = num1-num2; break;
-             case "/": resultado = num1/num2; break;
-         }
-         txtRes.setText(String.valueOf(resultado));
+
+        btnRes.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                double a = Double.parseDouble(n1.getText());
+                double b = Double.parseDouble(n2.getText());
+                txtRes.setText(String.valueOf(a-b));
+            }
+        });
+
+        btnMul.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                double a = Double.parseDouble(n1.getText());
+                double b = Double.parseDouble(n2.getText());
+                txtRes.setText(String.valueOf(a*b));
+            }
+        });
+
+        btnDiv.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                double a = Double.parseDouble(n1.getText());
+                double b = Double.parseDouble(n2.getText());
+                txtRes.setText(String.valueOf(a/b));
+            }
+        });
+
+        setVisible(true);
     }
-   
+
     public static void main(String[] args) {
-        CalculadoraGrafica cc = new CalculadoraGrafica();
-        cc.setVisible(true);
+        new CalculadoraGrafica();
     }
-   
 }
